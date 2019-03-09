@@ -1,5 +1,8 @@
+import * as Joi from 'joi'
+
 import { SKContext } from './SKContext'
 import { SKUpdate, SKUpdateJSON } from './SKUpdate'
+import { parseAndValidate } from './validation'
 
 export interface SKDeltaJSON {
   context?: any
@@ -12,15 +15,18 @@ export interface SKDeltaJSON {
  * Typically, the context is a vessel URN.
  */
 export class SKDelta {
-  constructor(
-    readonly updates: SKUpdate[] = [],
-    readonly context: SKContext | null = null
-  ) {}
+  private static schema = {
+    context: Joi.string().required(),
+    updates: Joi.array()
+      .min(1)
+      .required()
+  }
+
+  constructor(readonly context: SKContext, readonly updates: SKUpdate[]) {}
 
   static fromJSON(json: string | SKDeltaJSON): SKDelta {
-    const jsonObj: SKDeltaJSON = typeof json === 'string' ? JSON.parse(json) : json
-    const updates = jsonObj.updates.map(u => SKUpdate.fromJSON(u))
-
-    return new SKDelta(updates, jsonObj.context)
+    const obj = parseAndValidate(json, this.schema)
+    const updates = obj.updates.map(u => SKUpdate.fromJSON(u))
+    return new SKDelta(obj.context, updates)
   }
 }

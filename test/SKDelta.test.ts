@@ -1,4 +1,5 @@
 import {SKDelta} from "../src/SKDelta"
+import { expectValidationFailure } from './helpers'
 
 const signalkdelta = `
 {
@@ -46,5 +47,20 @@ describe("SKDelta Loading from JSON", () => {
 
     expect(update.values[1]).toHaveProperty('path', 'navigation.courseOverGround')
     expect(update.values[1]).toHaveProperty('value', 3.1)
+  })
+
+  it('fails validation if context is missing', () => {
+    const json = JSON.parse(signalkdelta)
+    Array<any>("", null, undefined, 5).forEach(v => {
+      json.context = v
+      expectValidationFailure(() => SKDelta.fromJSON(json))
+    })
+  })
+  it('fails validation if updates are missing', () => {
+    const json = JSON.parse(signalkdelta)
+    Array<any>("", null, undefined, 5, []).forEach(v => {
+      json.updates = v
+      expectValidationFailure(() => SKDelta.fromJSON(json))
+    })
   })
 })
