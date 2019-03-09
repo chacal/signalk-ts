@@ -1,5 +1,5 @@
-import { SKContext } from "./SKContext";
-import { SKUpdate, SKUpdateJSON } from "./SKUpdate";
+import { SKContext } from './SKContext'
+import { SKUpdate, SKUpdateJSON } from './SKUpdate'
 
 export interface SKDeltaJSON {
   context?: any
@@ -12,29 +12,15 @@ export interface SKDeltaJSON {
  * Typically, the context is a vessel URN.
  */
 export class SKDelta {
-  context?: SKContext
-  updates: SKUpdate[]
+  constructor(
+    readonly updates: SKUpdate[] = [],
+    readonly context: SKContext | null = null
+  ) {}
 
-  constructor(updates: SKUpdate[] = [], context: SKContext|null = null) {
-    this.updates = updates
-    if (context) {
-      this.context = context
-    }
-  }
+  static fromJSON(json: string | SKDeltaJSON): SKDelta {
+    const jsonObj: SKDeltaJSON = typeof json === 'string' ? JSON.parse(json) : json
+    const updates = jsonObj.updates.map(u => SKUpdate.fromJSON(u))
 
-  static fromJSON(json: string|SKDeltaJSON): SKDelta {
-    if (typeof json === 'string') {
-      return JSON.parse(json, SKDelta.reviver)
-    }
-    else {
-      let delta : SKDelta = Object.create(SKDelta.prototype)
-      delta.context = json.context
-      delta.updates = json.updates.map(u => SKUpdate.fromJSON(u))
-      return delta
-    }
-  }
-
-  static reviver(key: string, value: any): any {
-    return key === "" ? SKDelta.fromJSON(value) : value;
+    return new SKDelta(updates, jsonObj.context)
   }
 }
