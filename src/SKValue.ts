@@ -1,4 +1,4 @@
-import { SKPosition } from "./SKPosition";
+import { SKPosition, SKPositionJSON } from "./SKPosition";
 
 /**
  * SignalK specifies that timestamps should be serialized as ISO8601 timestamps.
@@ -6,10 +6,11 @@ import { SKPosition } from "./SKPosition";
 export type Timestamp = string
 
 export type SKValueType = number|string|SKPosition|Date
+export type SKValueTypeJSON = number|string|SKPositionJSON
 
 export interface SKValueJSON {
   path: string
-  value: SKValueType
+  value: SKValueTypeJSON
 }
 
 /**

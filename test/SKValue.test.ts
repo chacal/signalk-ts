@@ -18,3 +18,14 @@ it('can load a position from json', () => {
   expect(v.value).toMatchObject({"latitude":35.04832,"longitude":-76.62011})
   expect(v.value).toHaveProperty('asDMSString')
 })
+
+it('can load a position from object', () => {
+  const input = {
+    path: "navigation.position",
+    value: {"latitude":35.04832,"longitude":-76.62011}
+  }
+  const v = SKValue.fromJSON(input)
+  expect(v).toHaveProperty('path', "navigation.position")
+  expect(v.value).toMatchObject({"latitude":35.04832,"longitude":-76.62011})
+  expect(v.value).toHaveProperty('asDMSString')
+})
