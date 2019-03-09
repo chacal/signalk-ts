@@ -1,4 +1,4 @@
-import {SKDelta} from "./SKDelta"
+import {SKDelta} from "../src/SKDelta"
 
 const signalkdelta = `
 {

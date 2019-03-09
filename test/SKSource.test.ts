@@ -1,4 +1,4 @@
-import { SKSource } from "./SKSource";
+import { SKSource } from "../src/SKSource";
 
 it('can unmarshall a SKSource', () => {
   const s = SKSource.fromJSON('{ "label": "nmea2000", "pgn": 223 }')

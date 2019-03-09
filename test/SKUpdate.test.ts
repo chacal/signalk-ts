@@ -1,4 +1,4 @@
-import { SKUpdate } from "./SKUpdate";
+import { SKUpdate } from "../src/SKUpdate";
 
 it('can load from json', () => {
   const v = SKUpdate.fromJSON(`{

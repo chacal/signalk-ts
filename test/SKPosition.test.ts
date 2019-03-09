@@ -1,4 +1,4 @@
-import { SKPosition } from "./SKPosition";
+import { SKPosition } from "../src/SKPosition";
 
 it("can load from JSON", () => {
   const pos = SKPosition.fromJSON('{ "latitude": 87.1, "longitude": -123.2, "altitude": -1}')

@@ -1,4 +1,4 @@
-import { SKValue } from './SKValue';
+import { SKValue } from '../src/SKValue';
 
 it('can load from json', () => {
   const v = SKValue.fromJSON(`{
