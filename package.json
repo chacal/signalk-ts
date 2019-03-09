@@ -1,0 +1,19 @@
+{
+  "name": "@chacal/signalk-ts",
+  "version": "0.0.1",
+  "description": "Typescript bindings for processing Signal K data",
+  "main": "built/index.js",
+  "types": "built/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepublish": "rm built/*; npm run tsc",
+    "tsc": "./node_modules/.bin/tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.3.3333"
+  }
+}

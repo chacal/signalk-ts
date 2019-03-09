@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "sourceRoot": "./src",
+    "outDir": "./built",
+    "target": "es6",
+    "module": "commonjs",
+    "noEmitOnError": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "declaration": true,
+    "inlineSourceMap": true
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}
