@@ -1,43 +1,45 @@
-import { SKSource, SKSourceJSON } from "./SKSource";
-import { SKValue, SKValueJSON } from "./SKValue";
+import * as Joi from 'joi'
+import { SKSource, SKSourceJSON } from './SKSource'
+import { SKValue, SKValueJSON } from './SKValue'
+import { parseAndValidate } from './validation'
 
 export interface SKUpdateJSON {
   timestamp: string
-  source: SKSourceJSON
+  $source: string
   values: SKValueJSON[]
+  source?: SKSourceJSON
 }
 
 /**
  * One update to the values of an object.
  *
- * This includes the time of the update, the source and a list of values that
+ * This includes the time of the update, the source and a list of values
  * at the given timestamp.
  */
 export class SKUpdate {
-  timestamp: Date
-  source: SKSource
-  values: SKValue[]
-
-  constructor(source : SKSource, timestamp: Date = new Date(), values: SKValue[] = []) {
-    this.timestamp = timestamp
-    this.source = source
-    this.values = values
+  private static schema = {
+    timestamp: Joi.date()
+      .iso()
+      .required(),
+    $source: Joi.string().default('n/a'), // TODO: remove default value
+    values: Joi.array()
+      .items(Joi.object())
+      .min(1)
+      .required(),
+    source: Joi.object()
   }
 
-  static fromJSON(json: string|SKUpdateJSON): SKUpdate {
-    if (typeof json === 'string') {
-      return JSON.parse(json, SKUpdate.reviver)
-    }
-    else {
-      let update : SKUpdate = Object.create(SKUpdate.prototype)
-      update.timestamp = new Date(json.timestamp)
-      update.source = SKSource.fromJSON(json.source)
-      update.values = json.values.map(v => SKValue.fromJSON(v))
-      return update
-    }
-  }
+  constructor(
+    readonly sourceRef: string,
+    readonly timestamp: Date,
+    readonly values: SKValue[],
+    readonly source?: SKSource
+  ) {}
 
-  static reviver(key: string, value: any): any {
-    return key === "" ? SKUpdate.fromJSON(value) : value;
+  static fromJSON(json: string | SKUpdateJSON): SKUpdate {
+    const obj = parseAndValidate(json, this.schema)
+    const source = obj.source ? SKSource.fromJSON(obj.source) : undefined
+    const values = obj.values.map(u => SKValue.fromJSON(u))
+    return new SKUpdate(obj.$source, new Date(obj.timestamp), values, source)
   }
 }
