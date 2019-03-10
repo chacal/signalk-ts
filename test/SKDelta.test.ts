@@ -49,13 +49,21 @@ describe("SKDelta Loading from JSON", () => {
     expect(update.values[1]).toHaveProperty('value', 3.1)
   })
 
-  it('fails validation if context is missing', () => {
+  it('uses "self" context by default', () => {
     const json = JSON.parse(signalkdelta)
-    Array<any>("", null, undefined, 5).forEach(v => {
+    json.context = undefined
+    const delta = SKDelta.fromJSON(json)
+    expect(delta.context).toEqual('self')
+  })
+
+  it('fails validation if context is not a valid string', () => {
+    const json = JSON.parse(signalkdelta)
+    Array<any>("", null, 5).forEach(v => {
       json.context = v
       expectValidationFailure(() => SKDelta.fromJSON(json))
     })
   })
+
   it('fails validation if updates are missing', () => {
     const json = JSON.parse(signalkdelta)
     Array<any>("", null, undefined, 5, []).forEach(v => {
