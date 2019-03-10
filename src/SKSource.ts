@@ -1,5 +1,8 @@
 export interface SKSourceJSON {
   label: string
+  type: string
+  src: string
+  pgn?: number
 }
 
 /**
