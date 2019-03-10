@@ -1,5 +1,12 @@
 import * as Joi from 'joi'
-import { SKSource, SKSourceJSON } from './SKSource'
+import {
+  isSK1WSourceJSON,
+  isSKI2CKSourceJSON,
+  isSKN2KSourceJSON,
+  isSKNMEA0183KSourceJSON,
+  SKSource,
+  SKSourceJSON
+} from './SKSource'
 import { SKValue, SKValueJSON } from './SKValue'
 import { parseAndValidate } from './validation'
 
@@ -21,7 +28,7 @@ export class SKUpdate {
     timestamp: Joi.date()
       .iso()
       .required(),
-    $source: Joi.string().required(),
+    $source: Joi.string().default(generate$source, '$source can be derived from source'),
     values: Joi.array()
       .items(Joi.object())
       .min(1)
@@ -41,5 +48,28 @@ export class SKUpdate {
     const source = obj.source ? SKSource.fromJSON(obj.source) : undefined
     const values = obj.values.map(u => SKValue.fromJSON(u))
     return new SKUpdate(obj.$source, new Date(obj.timestamp), values, source)
+  }
+}
+
+function generate$source(context: SKUpdateJSON): string {
+  const src = context.source
+  if (!src) {
+    throw new Error('Can not derive $source from ' + JSON.stringify(context))
+  }
+
+  if (isSKN2KSourceJSON(src)) {
+    return `${src.label}.${src.src}` + (src.instance ? '.' + src.instance : '')
+  } else if (isSKNMEA0183KSourceJSON(src)) {
+    return `${src.label}.${src.talker}`
+  } else if (isSKI2CKSourceJSON(src)) {
+    return `${src.label}.${src.src}`
+  } else if (isSK1WSourceJSON(src)) {
+    return `${src.label}.${src.id}`
+  } else {
+    return assertNever(src)
+  }
+
+  function assertNever(x: never): never {
+    throw new Error('Unexpected object: ' + x)
   }
 }
