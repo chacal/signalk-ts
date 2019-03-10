@@ -21,7 +21,7 @@ export class SKUpdate {
     timestamp: Joi.date()
       .iso()
       .required(),
-    $source: Joi.string().default('n/a'), // TODO: remove default value
+    $source: Joi.string().required(),
     values: Joi.array()
       .items(Joi.object())
       .min(1)

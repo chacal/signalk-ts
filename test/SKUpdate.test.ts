@@ -7,6 +7,7 @@ const signalkUpdate = `{
     "src": "017",
     "pgn": 127488
   },
+  "$source": "myboat.017",
   "timestamp": "2010-01-07T07:18:44Z",
   "values": [
     {
