@@ -1,4 +1,4 @@
-import {SKDelta} from "../src/SKDelta"
+import { SKDelta } from '../src/SKDelta'
 import { expectValidationFailure } from './helpers'
 
 const signalkdelta = `
@@ -28,16 +28,16 @@ const signalkdelta = `
 }
 `
 
-describe("SKDelta Loading from JSON", () => {
-  it('can load a signalk json and return it as a skdelta object', ()=> {
-    const skdelta : SKDelta = SKDelta.fromJSON(signalkdelta)
+describe('SKDelta Loading from JSON', () => {
+  it('can load a signalk json and return it as a skdelta object', () => {
+    const skdelta = SKDelta.fromJSON(signalkdelta)
 
-    expect(skdelta.context).toEqual("vessels.urn:mrn:imo:mmsi:234567890")
+    expect(skdelta.context).toEqual('vessels.urn:mrn:imo:mmsi:234567890')
     expect(skdelta.updates).toHaveLength(1)
 
     const update = skdelta.updates[0]
 
-    expect(update.timestamp).toEqual(new Date("2010-01-07T07:18:44Z"))
+    expect(update.timestamp).toEqual(new Date('2010-01-07T07:18:44Z'))
     expect(update.source.label).toEqual('N2000-01')
 
     expect(update.values).toHaveLength(2)
@@ -58,7 +58,7 @@ describe("SKDelta Loading from JSON", () => {
 
   it('fails validation if context is not a valid string', () => {
     const json = JSON.parse(signalkdelta)
-    Array<any>("", null, 5).forEach(v => {
+    Array<any>('', null, 5).forEach(v => {
       json.context = v
       expectValidationFailure(() => SKDelta.fromJSON(json))
     })
@@ -66,7 +66,7 @@ describe("SKDelta Loading from JSON", () => {
 
   it('fails validation if updates are missing', () => {
     const json = JSON.parse(signalkdelta)
-    Array<any>("", null, undefined, 5, []).forEach(v => {
+    Array<any>('', null, undefined, 5, []).forEach(v => {
       json.updates = v
       expectValidationFailure(() => SKDelta.fromJSON(json))
     })
