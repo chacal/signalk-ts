@@ -1,6 +1,6 @@
 {
   "name": "@chacal/signalk-ts",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Typescript bindings for processing Signal K data",
   "main": "built/src/index.js",
   "types": "built/src/index.d.ts",
