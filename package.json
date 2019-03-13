@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@types/joi": "^14.3.2",
-    "joi": "^14.3.1"
+    "@types/validator": "^10.9.0",
+    "joi": "^14.3.1",
+    "validator": "^10.11.0"
   }
 }
