@@ -1,4 +1,5 @@
 import * as Joi from 'joi'
+import { RFC3339Validator } from './validation'
 import {
   isSK1WSourceJSON,
   isSKI2CKSourceJSON,
@@ -9,6 +10,8 @@ import {
 } from './SKSource'
 import { SKValue, SKValueJSON } from './SKValue'
 import { parseAndValidate } from './validation'
+
+const CustomJoi = Joi.extend(RFC3339Validator)
 
 export interface SKUpdateJSON {
   timestamp: string
@@ -25,8 +28,8 @@ export interface SKUpdateJSON {
  */
 export class SKUpdate {
   private static schema = {
-    timestamp: Joi.date()
-      .iso()
+    timestamp: CustomJoi.string()
+      .rfc3339()
       .required(),
     $source: Joi.string().default(generate$source, '$source can be derived from source'),
     values: Joi.array()

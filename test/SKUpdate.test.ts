@@ -1,4 +1,5 @@
 import { SKUpdate } from '../src/SKUpdate'
+import { expectValidationFailure } from './helpers'
 
 const signalkUpdate = `{
   "source": {
@@ -74,6 +75,23 @@ describe('SKUpdate', () => {
 
   it('derives 1W $source correctly from source', () => {
     assert$sourceDerivation(oneWireSource, '1W-0.28FF8C9560163C3')
+  })
+
+  it('fails validation if date is wrong', () => {
+    const wrongTsInput = [
+      undefined,
+      null,
+      '',
+      'test',
+      new Date().getMilliseconds(),
+      '2010-01-07 10:00:00',
+      '2010-01-07T10:00:00',
+    ]
+    const json = JSON.parse(signalkUpdate)
+    wrongTsInput.forEach(v => {
+      json.timestamp = v
+      expectValidationFailure(() => SKUpdate.fromJSON(json))
+    })
   })
 })
 
