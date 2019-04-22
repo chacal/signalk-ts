@@ -32,4 +32,8 @@ export class SKDelta {
     const updates = obj.updates.map(u => SKUpdate.fromJSON(u))
     return new SKDelta(obj.context as string, updates) // context is already validated to exist
   }
+
+  hasSelfContext(): boolean {
+    return !this.context || this.context === 'self' || this.context === 'vessels.self'
+  }
 }
