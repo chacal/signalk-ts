@@ -40,7 +40,7 @@ export class SKUpdate {
   }
 
   constructor(
-    readonly sourceRef: string,
+    readonly $source: string,
     readonly timestamp: Date,
     readonly values: SKValue[],
     readonly source?: SKSource

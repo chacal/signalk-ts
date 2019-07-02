@@ -50,7 +50,7 @@ export const oneWireSource = `{
 describe('SKUpdate', () => {
   it('can load from json', () => {
     const v = SKUpdate.fromJSON(signalkUpdate)
-    expect(v.sourceRef).toEqual('myboat.017')
+    expect(v.$source).toEqual('myboat.017')
     expect(v.source).toBeDefined()
     if (v.source) {
       expect(v.source.label).toEqual('N2000-01')
@@ -100,6 +100,6 @@ function assert$sourceDerivation(sourceJson: string, expected$source: string) {
   json.$source = undefined // Clear $source to force generating based on .source
   json.source = JSON.parse(sourceJson)
   const v = SKUpdate.fromJSON(json)
-  expect(v.sourceRef).toEqual(expected$source)
+  expect(v.$source).toEqual(expected$source)
   expect(v.source).toEqual(json.source)
 }
