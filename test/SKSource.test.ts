@@ -9,4 +9,5 @@ it('can load n2k source from JSON', () => {
   expect(s.label).toEqual('N2000-01')
   expect(s.src).toEqual('017')
   expect(s.pgn).toEqual(127488)
+  expect(s.deviceInstance).toEqual(53)
 })

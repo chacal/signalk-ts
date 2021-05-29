@@ -16,6 +16,7 @@ export interface SKN2KSourceJSON extends SKBaseSourceJSON {
   src: string
   pgn: number
   instance?: string
+  deviceInstance?: number
 }
 
 export interface SKNMEA0183SourceJSON extends SKBaseSourceJSON {
@@ -85,14 +86,16 @@ export class SKN2KSource extends SKBaseSource {
       .positive()
       .integer()
       .required(),
-    instance: Joi.string()
+    instance: Joi.string(),
+    deviceInstance: Joi.number().integer()
   })
 
   constructor(
     label: string,
     readonly src: string,
     readonly pgn: number,
-    readonly instance?: string
+    readonly instance?: string,
+    readonly deviceInstance?: number
   ) {
     super('NMEA2000', label)
   }
@@ -143,7 +146,7 @@ export const SKSource = {
 
     if (isSKN2KSourceJSON(obj)) {
       const n2kObj = parseAndValidate(obj, withBase(SKN2KSource.schema))
-      return new SKN2KSource(n2kObj.label, n2kObj.src, n2kObj.pgn, n2kObj.instance)
+      return new SKN2KSource(n2kObj.label, n2kObj.src, n2kObj.pgn, n2kObj.instance, n2kObj.deviceInstance)
     } else if (isSKNMEA0183KSourceJSON(obj)) {
       const nmea = parseAndValidate(obj, withBase(SKNMEA0183Source.schema))
       return new SKNMEA0183Source(nmea.label, nmea.sentence, nmea.talker)
