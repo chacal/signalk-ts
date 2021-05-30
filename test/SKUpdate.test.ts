@@ -7,7 +7,8 @@ const signalkUpdate = `{
     "type": "NMEA2000",
     "src": "017",
     "pgn": 127488,
-    "deviceInstance": 53
+    "deviceInstance": 53,
+    "canName": "c0a0be20e76afcd8"
   },
   "$source": "myboat.017",
   "timestamp": "2010-01-07T07:18:44Z",
@@ -28,7 +29,8 @@ export const n2kSource = `{
   "type": "NMEA2000",
   "src": "017",
   "pgn": 127488,
-  "deviceInstance": 53 
+  "deviceInstance": 53,
+  "canName": "c0a0be20e76afcd8"
 }`
 export const nmea0183Source = `{
   "label": "NMEA0183-0",
