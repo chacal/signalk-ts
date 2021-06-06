@@ -74,7 +74,7 @@ export class SKBaseSource {
       .required(),
     label: Joi.string()
       .allow('')
-      .required()
+      .default('')
   })
 
   constructor(readonly type: SKSourceType, readonly label: string) {}
