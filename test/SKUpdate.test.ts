@@ -1,7 +1,7 @@
 import { SKUpdate } from '../src/SKUpdate'
 import { expectValidationFailure } from './helpers'
 
-const signalkUpdate = `{
+const signalkUpdateString = `{
   "source": {
     "label": "N2000-01",
     "type": "NMEA2000",
@@ -23,6 +23,9 @@ const signalkUpdate = `{
     }
   ]
 }`
+
+const signalkUpdateObject = JSON.parse(signalkUpdateString)
+const signalkUpdateObjectWithDateObject = Object.assign({}, signalkUpdateObject, {timestamp: new Date(signalkUpdateObject.timestamp)})
 
 export const n2kSource = `{
   "label": "N2000-01",
@@ -53,16 +56,18 @@ export const oneWireSource = `{
 
 describe('SKUpdate', () => {
   it('can load from json', () => {
-    const v = SKUpdate.fromJSON(signalkUpdate)
-    expect(v.$source).toEqual('myboat.017')
-    expect(v.source).toBeDefined()
-    if (v.source) {
-      expect(v.source.label).toEqual('N2000-01')
-    }
-    expect(v.timestamp).toEqual(new Date('2010-01-07T07:18:44Z'))
-    expect(v.values).toHaveLength(2)
-    expect(v.values[0].path).toEqual('navigation.speedOverGround')
-    expect(v.values[0].value).toEqual(16.341667)
+    [signalkUpdateString, signalkUpdateObject, signalkUpdateObjectWithDateObject].forEach(input => {
+      const v = SKUpdate.fromJSON(input)
+      expect(v.$source).toEqual('myboat.017')
+      expect(v.source).toBeDefined()
+      if (v.source) {
+        expect(v.source.label).toEqual('N2000-01')
+      }
+      expect(v.timestamp).toEqual(new Date('2010-01-07T07:18:44Z'))
+      expect(v.values).toHaveLength(2)
+      expect(v.values[0].path).toEqual('navigation.speedOverGround')
+      expect(v.values[0].value).toEqual(16.341667)
+    })
   })
 
   it('derives N2k $source correctly from source', () => {
@@ -91,7 +96,7 @@ describe('SKUpdate', () => {
       '2010-01-07 10:00:00',
       '2010-01-07T10:00:00',
     ]
-    const json = JSON.parse(signalkUpdate)
+    const json = JSON.parse(signalkUpdateString)
     wrongTsInput.forEach(v => {
       json.timestamp = v
       expectValidationFailure(() => SKUpdate.fromJSON(json))
@@ -100,7 +105,7 @@ describe('SKUpdate', () => {
 })
 
 function assert$sourceDerivation(sourceJson: string, expected$source: string) {
-  const json = JSON.parse(signalkUpdate)
+  const json = JSON.parse(signalkUpdateString)
   json.$source = undefined // Clear $source to force generating based on .source
   json.source = JSON.parse(sourceJson)
   const v = SKUpdate.fromJSON(json)

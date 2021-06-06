@@ -28,9 +28,10 @@ export interface SKUpdateJSON {
  */
 export class SKUpdate {
   private static schema = {
-    timestamp: CustomJoi.string()
-      .rfc3339()
-      .required(),
+    timestamp: Joi.alternatives().try(
+      Joi.date().options({convert: false}),
+      CustomJoi.rfc3339()
+    ).required(),
     $source: Joi.string().default(generate$source),
     values: Joi.array()
       .items(Joi.object())
