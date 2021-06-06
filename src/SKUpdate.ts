@@ -31,7 +31,7 @@ export class SKUpdate {
     timestamp: CustomJoi.string()
       .rfc3339()
       .required(),
-    $source: Joi.string().default(generate$source, '$source can be derived from source'),
+    $source: Joi.string().default(generate$source),
     values: Joi.array()
       .items(Joi.object())
       .min(1)

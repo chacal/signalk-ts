@@ -16,10 +16,7 @@ export interface SKDeltaJSON {
  */
 export class SKDelta {
   private static schema = {
-    context: Joi.string().default(
-      'self',
-      '"self" context is assumed if no context exists'
-    ),
+    context: Joi.string().default('self'),
     updates: Joi.array()
       .min(1)
       .required()
