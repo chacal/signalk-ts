@@ -61,14 +61,16 @@ function generate$source(context: SKUpdateJSON): string {
     throw new Error('Can not derive $source from ' + JSON.stringify(context))
   }
 
+  const label = src.label ? src.label : ''
+
   if (isSKN2KSourceJSON(src)) {
-    return `${src.label}.${src.src}` + (src.instance ? '.' + src.instance : '')
+    return `${label}.${src.src}` + (src.instance ? '.' + src.instance : '')
   } else if (isSKNMEA0183KSourceJSON(src)) {
-    return `${src.label}.${src.talker}`
+    return `${label}.${src.talker}`
   } else if (isSKI2CKSourceJSON(src)) {
-    return `${src.label}.${src.src}`
+    return `${label}.${src.src}`
   } else if (isSK1WSourceJSON(src)) {
-    return `${src.label}.${src.id}`
+    return `${label}.${src.id}`
   } else {
     return assertNever(src)
   }

@@ -42,6 +42,12 @@ export const nmea0183Source = `{
   "talker": "GP"
 }`
 
+export const nmea0183SourceWithoutLabel = `{
+  "type": "NMEA0183",
+  "sentence": "RMC",
+  "talker": "GP"
+}`
+
 export const i2cSource = `{
   "label": "I2C-0",
   "type": "I2C",
@@ -61,6 +67,7 @@ describe('SKUpdate', () => {
       expect(v.$source).toEqual('myboat.017')
       expect(v.source).toBeDefined()
       if (v.source) {
+        expect(v.source.type).toEqual('NMEA2000')
         expect(v.source.label).toEqual('N2000-01')
       }
       expect(v.timestamp).toEqual(new Date('2010-01-07T07:18:44Z'))
@@ -76,6 +83,10 @@ describe('SKUpdate', () => {
 
   it('derives NMEA0183 $source correctly from source', () => {
     assert$sourceDerivation(nmea0183Source, 'NMEA0183-0.GP')
+  })
+
+  it('derives NMEA0183 $source correctly from source without label', () => {
+    assert$sourceDerivation(nmea0183SourceWithoutLabel, '.GP')
   })
 
   it('derives I2C $source correctly from source', () => {
@@ -110,5 +121,4 @@ function assert$sourceDerivation(sourceJson: string, expected$source: string) {
   json.source = JSON.parse(sourceJson)
   const v = SKUpdate.fromJSON(json)
   expect(v.$source).toEqual(expected$source)
-  expect(v.source).toEqual(json.source)
 }
